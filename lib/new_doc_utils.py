@@ -110,17 +110,15 @@ def get_wordnet_pos(treebank_tag):
         return ''
 
 # se define una nueva función para el preprocesado del texto que emplea PoS tagging
-def preprocess(text):
-    lemmatizer  = WordNetLemmatizer()
-    stopwords = set(nltk.corpus.stopwords.words('english'))
-    for token_pos in pos_tag(nltk.word_tokenize(text)): # recorre el texto palabra a palabra
-        token = token_pos[0]
-        token_tag = token_pos[1]
-        if token not in stopwords and token not in punctuation:
-            if get_wordnet_pos(token_tag) != '':
-                token = lemmatizer.lemmatize(token, get_wordnet_pos(token_tag))
-                token = token.lower()
-                yield token
+def preprocess_PoS(text):
+    token_pos = pos_tag(text)
+    token = token_pos[0]
+    token_tag = token_pos[1]
+    if token not in stopwords and token not in punctuation:
+        if get_wordnet_pos(token_tag) != '':
+            token = lemmatizer.lemmatize(token, get_wordnet_pos(token_tag))
+            token = token.lower()
+            return token
 
 def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     '''
@@ -160,13 +158,12 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
         for topic in corpus:
             cleaned_corpus_topic = list()
             for word in topic:
-                if ((word not in stop_words) and word not in punct_exclusions):
                     if '.' in word:  # solving wiki bug
                         for w in word.split('.'):
-                            cleaned_corpus_topic.append(w)
+                            cleaned_corpus_topic.append(preprocess_PoS(w))
                             n_words += 1
                     else:
-                        cleaned_corpus_topic.append(word)
+                        cleaned_corpus_topic.append(preprocess_PoS(word))
                         n_words += 1
             cleaned_corpus.append(cleaned_corpus_topic)
 
