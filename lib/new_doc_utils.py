@@ -70,6 +70,58 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Statistics"]
 
 
+import nltk
+from nltk import pos_tag
+from nltk.corpus import wordnet
+
+def vectSeq(sequences, max_dims=10000):
+    '''
+    Source: "Deep Learning with Python - François Cholet"
+    Vectorizes a sequence of text data (supposed cleaned).
+    Returns numpy vector version of sequence text data, ready 
+    for Feedforward Neural Network input.
+    '''
+
+    results = np.zeros((len(sequences), max_dims))
+
+    for i, sequence in enumerate(sequences):
+        results[i, sequence] = 1
+
+    return results
+
+
+def get_wordnet_pos(treebank_tag):
+    """
+
+    Función que devuelve un tag reconocible para el lematizador de WordNet.
+    Se implementa a partir del código del siguiente enlace:
+    https://stackoverflow.com/questions/15586721/wordnet-lemmatization-and-pos-tagging-in-python
+    
+    """
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return ''
+
+# se define una nueva función para el preprocesado del texto que emplea PoS tagging
+def preprocess(text):
+    lemmatizer  = WordNetLemmatizer()
+    stopwords = set(nltk.corpus.stopwords.words('english'))
+    for token_pos in pos_tag(nltk.word_tokenize(text)): # recorre el texto palabra a palabra
+        token = token_pos[0]
+        token_tag = token_pos[1]
+        if token not in stopwords and token not in punctuation:
+            if get_wordnet_pos(token_tag) != '':
+                token = lemmatizer.lemmatize(token, get_wordnet_pos(token_tag))
+                token = token.lower()
+                yield token
+
 def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     '''
     Given a raw text input , tokenizes into words and performs stopword
@@ -119,22 +171,6 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
             cleaned_corpus.append(cleaned_corpus_topic)
 
     return cleaned_corpus
-
-
-def vectSeq(sequences, max_dims=10000):
-    '''
-    Source: "Deep Learning with Python - François Cholet"
-    Vectorizes a sequence of text data (supposed cleaned).
-    Returns numpy vector version of sequence text data, ready 
-    for Feedforward Neural Network input.
-    '''
-
-    results = np.zeros((len(sequences), max_dims))
-
-    for i, sequence in enumerate(sequences):
-        results[i, sequence] = 1
-
-    return results
 
 
 def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False):
