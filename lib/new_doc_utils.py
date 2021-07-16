@@ -110,7 +110,7 @@ def get_wordnet_pos(treebank_tag):
         return ''
 
 # se define una nueva función para el preprocesado del texto que emplea PoS tagging
-def preprocess_PoS(text,lemmatizerm,stopwords,punctuation):
+def preprocess_PoS(text,lemmatizer,stopwords,punctuation):
     token_pos = pos_tag(text)
     token = token_pos[0]
     token_tag = token_pos[1]
@@ -161,10 +161,10 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
             for word in topic:
                     if '.' in word:  # solving wiki bug
                         for w in word.split('.'):
-                            cleaned_corpus_topic.append(preprocess_PoS(w,lemmatizerm,stopwords,punctuation))
+                            cleaned_corpus_topic.append(preprocess_PoS(w,lemmatizer,stopwords,punctuation))
                             n_words += 1
                     else:
-                        cleaned_corpus_topic.append(preprocess_PoS(word,lemmatizerm,stopwords,punctuation))
+                        cleaned_corpus_topic.append(preprocess_PoS(word,lemmatizer,stopwords,punctuation))
                         n_words += 1
             cleaned_corpus.append(cleaned_corpus_topic)
 
