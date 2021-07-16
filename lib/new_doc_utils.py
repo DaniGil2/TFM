@@ -92,7 +92,6 @@ def vectSeq(sequences, max_dims=10000):
 
 def get_wordnet_pos(treebank_tag):
     """
-
     Función que devuelve un tag reconocible para el lematizador de WordNet.
     Se implementa a partir del código del siguiente enlace:
     https://stackoverflow.com/questions/15586721/wordnet-lemmatization-and-pos-tagging-in-python
@@ -111,14 +110,15 @@ def get_wordnet_pos(treebank_tag):
 
 # se define una nueva función para el preprocesado del texto que emplea PoS tagging
 def preprocess_PoS(text,lemmatizer,stopwords,punctuation):
-    token_pos = pos_tag(text)
-    token = token_pos[0]
-    token_tag = token_pos[1]
-    if token not in stopwords and token not in punctuation:
-        if get_wordnet_pos(token_tag) != '':
-            token = lemmatizer.lemmatize(token, get_wordnet_pos(token_tag))
-            token = token.lower()
-            return token
+        if text!='':
+          token_pos = pos_tag([text])
+          token = token_pos[0][0]
+          token_tag = token_pos[0][1]
+          if text not in stopwords and text not in punctuation:
+            if get_wordnet_pos(token_tag) != '':
+                token = lemmatizer.lemmatize(token, get_wordnet_pos(token_tag))
+                token = token.lower()
+                return token
 
 def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     '''
@@ -161,10 +161,12 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
             for word in topic:
                     if '.' in word:  # solving wiki bug
                         for w in word.split('.'):
-                            cleaned_corpus_topic.append(preprocess_PoS(w,lemmatizer,stopwords,punctuation))
-                            n_words += 1
+                            ap = preprocess_PoS(w,lemmatizer,stopwords,punctuation)
                     else:
-                        cleaned_corpus_topic.append(preprocess_PoS(word,lemmatizer,stopwords,punctuation))
+                        ap = preprocess_PoS(word,lemmatizer,stopwords,punctuation)
+                        
+                    if ap and ap!='==' and ap!='===':
+                        cleaned_corpus_topic.append(ap)
                         n_words += 1
             cleaned_corpus.append(cleaned_corpus_topic)
 
