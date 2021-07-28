@@ -150,8 +150,8 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
         return corpus
 
     else:
-        lemmatizer  = WordNetLemmatizer()
-        stopwords = set(nltk.corpus.stopwords.words('english'))
+        lemmatizer  = LEMMATIZER
+        stopwords = STOP_WORDS
         punctuation = string.punctuation
 
         cleaned_corpus = list()
@@ -366,10 +366,18 @@ def custom_preprocess(doc):
     Applies tokenization + lemmatization + punctuation removal + stopwords filtering to a document.
     Returns tokens of processed document.
     '''
+
+    lemmatizer  = LEMMATIZER
+    stopwords = STOP_WORDS
+    punctuation = string.punctuation
+
     tokenized_doc = word_tokenize(doc)
-    lemmatized_doc = [LEMMATIZER.lemmatize(word) for word in tokenized_doc]
-    # tokens= [word for word in lemmatized_doc if word.isalnum()]
-    tokens = [word.lower() for word in lemmatized_doc if word.isalnum() and not word in STOP_WORDS]
+    tokens = []
+
+    for word in tokenized_doc:
+        token = preprocess_PoS(word,lemmatizer,stopwords,punctuation)
+        if token:
+          tokens.append(token)
 
     return tokens
 
