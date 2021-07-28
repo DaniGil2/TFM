@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=false):
+def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
