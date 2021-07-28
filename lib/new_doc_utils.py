@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False):
+def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=false):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -236,43 +236,44 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
     if debug:
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
+    
+    if !represent:
 
+        # Data sequencing/encoding
+        train_model_input = list()
+        test_model_input = list()
 
-    # Data sequencing/encoding
-    train_model_input = list()
-    test_model_input = list()
+        for topic in train_data_clean:
+            train_model_input.append(dictionary.doc2idx(topic))
 
-    for topic in train_data_clean:
-        train_model_input.append(dictionary.doc2idx(topic))
+        for test_page in test_data_clean:
+            test_model_input.append(dictionary.doc2idx(test_page))
 
-    for test_page in test_data_clean:
-        test_model_input.append(dictionary.doc2idx(test_page))
+        train_model_input = np.array(train_model_input)
+        test_model_input = np.array(test_model_input)
 
-    train_model_input = np.array(train_model_input)
-    test_model_input = np.array(test_model_input)
+        x_train = vectSeq(train_model_input, max_dims=len(dictionary))
+        x_test = vectSeq(test_model_input, max_dims=len(dictionary))
 
-    x_train = vectSeq(train_model_input, max_dims=len(dictionary))
-    x_test = vectSeq(test_model_input, max_dims=len(dictionary))
+        # Generating labels (one hot encoding)
+        train_labels = list()
+        test_labels = list()
 
-    # Generating labels (one hot encoding)
-    train_labels = list()
-    test_labels = list()
+        if dataset_type in "wiki":
+            topics = ALL_TOPICS
+        elif dataset_type in "arxiv":
+            topics = ARXIV_WIKI_TOPICS
 
-    if dataset_type in "wiki":
-        topics = ALL_TOPICS
-    elif dataset_type in "arxiv":
-        topics = ARXIV_WIKI_TOPICS
+        for i, topic in enumerate(topics):
+            train_labels.append(i)
 
-    for i, topic in enumerate(topics):
-        train_labels.append(i)
+        for test_page in test_data_clean_pairs:
+            test_labels.append(test_page[1])
 
-    for test_page in test_data_clean_pairs:
-        test_labels.append(test_page[1])
+        y_train = to_categorical(train_labels)
+        y_test = to_categorical(test_labels)
 
-    y_train = to_categorical(train_labels)
-    y_test = to_categorical(test_labels)
-
-    return x_train, y_train, x_test, y_test, dictionary
+    return x_train, y_train, x_test, y_test, dictionary, foo
 
 
 def processClassifierData(train_raw_data, test_raw_data, topics, dataset_type="wiki"):
