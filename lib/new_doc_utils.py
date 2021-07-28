@@ -254,30 +254,30 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
 
         x_train = vectSeq(train_model_input, max_dims=len(dictionary))
         x_test = vectSeq(test_model_input, max_dims=len(dictionary))
-
-        # Generating labels (one hot encoding)
-        train_labels = list()
-        test_labels = list()
-
-        if dataset_type in "wiki":
-            topics = ALL_TOPICS
-        elif dataset_type in "arxiv":
-            topics = ARXIV_WIKI_TOPICS
-
-        for i, topic in enumerate(topics):
-            train_labels.append(i)
-
-        for test_page in test_data_clean_pairs:
-            test_labels.append(test_page[1])
-
-        y_train = to_categorical(train_labels)
-        y_test = to_categorical(test_labels)
         
     else:
+      
         x_train = train_data_clean
-        y_train = train_labels
         x_test = test_data_clean
-        y_test = test_labels
+    
+    
+    # Generating labels (one hot encoding)
+    train_labels = list()
+    test_labels = list()
+
+    if dataset_type in "wiki":
+        topics = ALL_TOPICS
+    elif dataset_type in "arxiv":
+        topics = ARXIV_WIKI_TOPICS
+
+    for i, topic in enumerate(topics):
+        train_labels.append(i)
+
+    for test_page in test_data_clean_pairs:
+        test_labels.append(test_page[1])
+
+    y_train = to_categorical(train_labels)
+    y_test = to_categorical(test_labels)
         
     return x_train, y_train, x_test, y_test, dictionary, foo
 
