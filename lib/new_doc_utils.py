@@ -272,7 +272,13 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
 
         y_train = to_categorical(train_labels)
         y_test = to_categorical(test_labels)
-
+        
+    else:
+        x_train = train_data_clean
+        y_train = train_labels
+        x_test = test_data_clean
+        y_test = test_labels
+        
     return x_train, y_train, x_test, y_test, dictionary, foo
 
 
