@@ -237,7 +237,7 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
     
-    if !represent:
+    if represent:
 
         # Data sequencing/encoding
         train_model_input = list()
