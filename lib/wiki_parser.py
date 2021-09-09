@@ -1,6 +1,8 @@
 # Wiki API libraries
 import wikipedia
 import wikipediaapi
+from wikipedia.exceptions import PageError
+from wikipedia.exceptions import DisambiguationError
 
 # Multithreading
 import threading
@@ -17,6 +19,37 @@ ALL_TOPICS = ["Chemical engineering",
 
 WIKI = wikipediaapi.Wikipedia(language='en', extract_format=wikipediaapi.ExtractFormat.WIKI)
 
+import requests
+
+def getSubcategories(category):
+    # Author: Daniel Gil
+    # Idea taken from: https://www.mediawiki.org/wiki/API:Categorymembers#Python_3
+
+    S = requests.Session()
+
+    URL = "https://en.wikipedia.org/w/api.php"
+    
+    subcategories = []
+
+    PARAMS = {
+        "action": "query",
+        "cmtitle": "Category:" + category,
+        "cmtype": "subcat",
+        "cmlimit": "50",
+        "list": "categorymembers",
+        "format": "json"
+    }
+
+    R = S.get(url=URL, params=PARAMS)
+    DATA = R.json()
+
+    PAGES = DATA["query"]["categorymembers"]
+
+    for page in PAGES:
+        subcategories.append(page["title"])
+
+    return subcategories
+    
 def getWikiSummaries(target_article=None, topics_list=ALL_TOPICS, split_on_words=True):
     '''
     Downloads and parses all summary definitions of the <topics_list> list specified.
@@ -59,7 +92,6 @@ def getWikiFullPage(target_article=None, topics_list=ALL_TOPICS, split_on_words=
 def concurrentGetWikiFullPage(target_article=None, topics_list=ALL_TOPICS, split_on_words=True):
     '''
     MULTITHREADING VERSION
-
     Downloads and parses the full page of definitions of the <topics> list specified.
     If a target article is specified, also returns its corresponding summary.
     '''
@@ -73,7 +105,15 @@ def concurrentGetWikiFullPage(target_article=None, topics_list=ALL_TOPICS, split
         """wrapper function to start the job in the child process"""
         print("Obtaining full wikipedia page for the topic: {}. (Definition of Class #[{}])".format(topic, topic_id))
         lock.acquire()
-        full_pages[topic_id] = wikipedia.page(topic)
+        PageError
+
+        try:
+          full_pages[topic_id] = wikipedia.page(topic)
+        except PageError:
+          print("Going to next cat...")
+        except DisambiguationError:
+          print("Going to next cat (D)...")
+
         lock.release()
 
     thread_list = []
@@ -130,7 +170,6 @@ def getAllCatArticles(topics_list, full_text_test=False):
     '''
     Retrieves all articles from categories pages given a list of topics.
     Raw text Dataset structure: [ [topic_j_cat_pages], topic_j_label]
-
     Returns raw text dataset and the total number of articles retrieved.
     '''
 
@@ -157,10 +196,8 @@ def getAllCatArticles(topics_list, full_text_test=False):
 def concurrentGetAllCatArticles(topics_list, full_text_test=True):
     '''
     MULTITHREADED VERSION. Faster, but may contain bugs.
-
     Retrieves all articles from categories pages given a list of topics.
     Raw text Dataset structure: [ [topic_j_cat_pages], topic_j_label]
-
     Returns raw text dataset and the total number of articles retrieved.
     '''
     global lock
