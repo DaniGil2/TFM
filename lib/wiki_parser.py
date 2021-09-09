@@ -21,6 +21,7 @@ WIKI = wikipediaapi.Wikipedia(language='en', extract_format=wikipediaapi.Extract
 
 import requests
 
+
 def getSubcategories(category):
     # Author: Daniel Gil
     # Idea taken from: https://www.mediawiki.org/wiki/API:Categorymembers#Python_3
@@ -49,7 +50,23 @@ def getSubcategories(category):
         subcategories.append(page["title"])
 
     return subcategories
-    
+
+  
+def getSubcatArticles():
+    subcat_set = []
+    index=0
+
+    for topic in ALL_TOPICS:
+      subcat = getSubcategories(topic)
+      subcat = [x.replace('Category:', '') for x in subcat]
+      subcat_pages = concurrentGetWikiFullPage(topics_list = subcat)
+      subcat_pages = [s for s in subcat_pages if s != '']
+      subcat_set.append([index, subcat_pages])
+      index += 1
+
+    return subcat_set
+  
+  
 def getWikiSummaries(target_article=None, topics_list=ALL_TOPICS, split_on_words=True):
     '''
     Downloads and parses all summary definitions of the <topics_list> list specified.
