@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False):
+def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN'):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -265,6 +265,7 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
     train_labels = list()
     test_labels = list()
 
+
     if dataset_type in "wiki":
         topics = ALL_TOPICS
     elif dataset_type in "arxiv":
@@ -276,8 +277,22 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
     for test_page in test_data_clean_pairs:
         test_labels.append(test_page[1])
 
-    y_train = to_categorical(train_labels)
-    y_test = to_categorical(test_labels)
+    if clasif=='NN':
+        y_train = to_categorical(train_labels)
+        y_test = to_categorical(test_labels)
+    else:
+        x_train_copy=x_train
+        x_train=[]
+        for doc in x_train_copy:
+          x_train.append(' '.join(doc))
+
+        x_test_copy=x_test
+        x_test=[]
+        for doc in x_test_copy:
+          x_test.append(' '.join(doc))
+
+        y_train = train_labels
+        y_test = test_labels
         
     return x_train, y_train, x_test, y_test, dictionary, foo
 
