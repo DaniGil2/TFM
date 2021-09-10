@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN'):
+def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN'):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -297,37 +297,37 @@ def processNeuralNetData(train_data, test_data, dataset_type ,preprocess = 'simp
     return x_train, y_train, x_test, y_test, dictionary, foo
 
 
-def processClassifierData(train_raw_data, test_raw_data, topics, dataset_type="wiki"):
-    """
-    Given raw wikipedia pages (topic defs) as train data, and raw string articles as test data,
-    Generates (unprocessed text) train / test pairs suitable for Sklearn-compatible Classifiers.
-    """
-    x_train = []
-    y_test = []
-    x_test = []
-
-    # Note: this supposes topic definition is full page
-    if dataset_type in "wiki":
-        for wikipage in train_raw_data:
-            x_train.append(wikipage.content)
-
-        y_train = [i for i in range(len(topics))]
-
-        for article_class in test_raw_data:
-            for article in article_class[0]:
-                x_test.append(article)
-                y_test.append(article_class[1])
-    else:  # arxiv dataset
-        for wikipage in train_raw_data:  # also gets topics defs form wiki
-            x_train.append(wikipage.content)
-
-        y_train = [i for i in range(len(topics))]
-        for subject in  test_raw_data:
-            for paper in subject["papers"]:
-                x_test.append(paper["title"] + " : " + paper["abstract"])
-                y_test.append(subject["label"])
-
-    return x_train, y_train, x_test, y_test
+#def processClassifierData(train_raw_data, test_raw_data, topics, dataset_type="wiki"):
+#    """
+#    Given raw wikipedia pages (topic defs) as train data, and raw string articles as test data,
+#    Generates (unprocessed text) train / test pairs suitable for Sklearn-compatible Classifiers.
+#    """
+#    x_train = []
+#    y_test = []
+#    x_test = []
+#
+#    # Note: this supposes topic definition is full page
+#    if dataset_type in "wiki":
+#        for wikipage in train_raw_data:
+#            x_train.append(wikipage.content)
+#
+#        y_train = [i for i in range(len(topics))]
+#
+#        for article_class in test_raw_data:
+#            for article in article_class[0]:
+#                x_test.append(article)
+#                y_test.append(article_class[1])
+#    else:  # arxiv dataset
+#        for wikipage in train_raw_data:  # also gets topics defs form wiki
+#            x_train.append(wikipage.content)
+#
+#        y_train = [i for i in range(len(topics))]
+#        for subject in  test_raw_data:
+#            for paper in subject["papers"]:
+#                x_test.append(paper["title"] + " : " + paper["abstract"])
+#                y_test.append(subject["label"])
+#
+#    return x_train, y_train, x_test, y_test
 
 
 def plotConfMatrix(y_test, predictions, model, dataset_type="wiki"):
