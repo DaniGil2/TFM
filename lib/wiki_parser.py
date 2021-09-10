@@ -23,6 +23,23 @@ WIKI = wikipediaapi.Wikipedia(language='en', extract_format=wikipediaapi.Extract
 import requests
 
 
+def getSubcatLabels(defs):
+    subcat_labels=[]
+    for sub in range(len(defs)):
+      for n_sub in range(len(defs[sub][1])):
+        subcat_labels.append(sub)
+
+    return subcat_labels
+  
+def appendTopicSubcatDefs(topics, subcats):
+  data = topics
+
+  for sub in range(len(subcats)):
+    for n_sub in range(len(subcats[sub][1])):
+      data = data + subcats[sub][1]
+
+  return data
+
 def getSubcategories(category):
     # Author: Daniel Gil
     # Idea taken from: https://www.mediawiki.org/wiki/API:Categorymembers#Python_3
