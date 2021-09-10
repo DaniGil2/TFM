@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN'):
+def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN', subcat_labels=None):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -261,7 +261,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
         x_test = test_data_clean
     
     
-    # Generating labels (one hot encoding)
+    
     train_labels = list()
     test_labels = list()
 
@@ -273,14 +273,19 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
 
     for i, topic in enumerate(topics):
         train_labels.append(i)
+    
+    if subcat_labels:
+        train_labels = train_labels + subcat_labels
 
     for test_page in test_data_clean_pairs:
         test_labels.append(test_page[1])
 
     if clasif=='NN':
+        # Generating labels (one hot encoding)
         y_train = to_categorical(train_labels)
         y_test = to_categorical(test_labels)
     else:
+        # Making texts compatible with Andres methods
         x_train_copy=x_train
         x_train=[]
         for doc in x_train_copy:
@@ -291,6 +296,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
         for doc in x_test_copy:
           x_test.append(' '.join(doc))
 
+        # Generating labels (numerical)
         y_train = train_labels
         y_test = test_labels
         
