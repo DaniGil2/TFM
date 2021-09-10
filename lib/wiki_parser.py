@@ -3,6 +3,7 @@ import wikipedia
 import wikipediaapi
 from wikipedia.exceptions import PageError
 from wikipedia.exceptions import DisambiguationError
+from new_doc_utils import ARXIV_WIKI_TOPICS
 
 # Multithreading
 import threading
@@ -52,11 +53,15 @@ def getSubcategories(category):
     return subcategories
 
   
-def getWikiSubcatArticles():
+def getSubcatArticles(dataset):
     subcat_set = []
     index=0
-
-    for topic in ALL_TOPICS:
+    if dataset == 'wiki':
+      all_topics = ALL_TOPICS
+    else:
+      all_topics = ARXIV_WIKI_TOPICS
+    
+    for topic in all_topics:
       subcat = getSubcategories(topic)
       subcat = [x.replace('Category:', '') for x in subcat]
       subcat_pages = concurrentGetWikiFullPage(topics_list = subcat)
