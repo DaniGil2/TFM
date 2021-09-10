@@ -35,7 +35,6 @@ def appendTopicSubcatDefs(topics, subcats):
   data = topics
 
   for sub in range(len(subcats)):
-    for n_sub in range(len(subcats[sub][1])):
       data = data + subcats[sub][1]
 
   return data
