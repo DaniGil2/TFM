@@ -52,7 +52,7 @@ def getSubcategories(category):
     return subcategories
 
   
-def getSubcatArticles():
+def getWikiSubcatArticles():
     subcat_set = []
     index=0
 
