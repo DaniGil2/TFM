@@ -173,7 +173,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN', subcat_labels=None, filter_dict=False):
+def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN', subcat_labels=None):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -233,9 +233,6 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     # Doc2Bow dictionary of full corpus
     dictionary = gensim.corpora.Dictionary(foo)
     
-    if filter_dict:
-      dictionary.filter_extremes(no_below=20, no_above=0.7)
-      
     if debug:
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
