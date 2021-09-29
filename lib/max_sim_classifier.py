@@ -156,10 +156,8 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
         outputs = list()
 
         check_is_fitted(self, ['X_', 'y_'])
-
-        input_articles = list(doc_utils.prepare_corpus(X, train_data=False,preprocess=self.preprocess ,dataset_type=self.dataset_type))
-
-        for i, doc in enumerate(input_articles):
+        
+        for i, doc in enumerate(X):
             inferred_vector = self.model.infer_vector(doc)
             sims = self.model.docvecs.most_similar([inferred_vector], topn=len(self.model.docvecs))
             most_similar_label = sims[0][0]  # index 0 === most similar
