@@ -280,3 +280,51 @@ def concurrentGetAllCatArticles(topics_list, full_text_test=True):
             total_num_articles += len(topic[0])
 
     return raw_dataset, total_num_articles
+  
+  
+def getSubCategoryArticles(topic, num_arts_cat, target):
+  all_articles = list()
+  all_subcats = list()
+  num_articles = 0
+  num_articles_to_get = target - num_arts_cat
+
+  subcat = getSubcategories(topic)
+  subcat = [x.replace('Category:', '') for x in subcat]
+  all_subcats.append(subcat)
+  
+  for cat in all_subcats[0]:
+      if num_articles < num_articles_to_get:
+          cat_members_list = getCatMembersList(cat)
+
+          #if full_text_test:
+          test_pages = getCatMembersTexts(cat_members_list, section="all")
+          #else:
+          #   test_pages = getCatMembersTexts(cat_members_list)
+
+          if (len(test_pages) == 0):
+              print("Could not retrieve articles from category topic:'{}'\n".format(cat))
+          else:
+              if (num_articles + len(test_pages[1:])) < num_articles_to_get:
+                  print("Retrieved {} articles from category topic '{}'".format(len(test_pages) - 1, cat))
+                  all_articles.append(test_pages[1:])  # first summary is the topic definition, needs to be exluded
+                  num_articles = num_articles + len(test_pages[1:])
+              else:
+                  arts = num_articles_to_get - num_articles
+                  print("Retrieved {} articles from category topic '{}'".format(arts, cat))
+                  all_articles.append(test_pages[1:(arts+1)])  # first summary is the topic definition, needs to be exluded
+                  num_articles = num_articles + len(test_pages[1:(arts+1)])
+  
+  list_articles=list()
+  for articles in all_articles:
+      list_articles += articles
+
+  return list_articles, num_articles
+
+
+def getAllSubCategoryArticles(topics_list, cat_arts_dataset, target):
+  list_articles = ["" for elem in topics_list]
+  for topic_id in range(len(topics_list)):
+    arts, num = getSubCategoryArticles(topics_list[topic_id], len(cat_arts_dataset[topic_id][0]), target)
+    list_articles[topic_id] = (arts, topic_id)
+  
+  return list_articles
