@@ -328,3 +328,12 @@ def getAllSubCategoryArticles(topics_list, cat_arts_dataset, target):
     list_articles[topic_id] = (arts, topic_id)
   
   return list_articles
+
+
+def appendArticlesByTopic(cat_arts, subcat_arts):
+  all_articles = ["" for elem in cat_arts]
+
+  for topic_id in range(len(cat_arts)):
+    all_articles[topic_id] = (cat_arts[topic_id][0] + subcat_arts[topic_id][0], topic_id)
+
+  return all_articles
