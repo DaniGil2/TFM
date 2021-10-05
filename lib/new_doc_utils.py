@@ -233,6 +233,8 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     # Doc2Bow dictionary of full corpus
     dictionary = gensim.corpora.Dictionary(foo)
     
+    dictionary.filter_extremes(10, 0.7)
+    
     if debug:
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
