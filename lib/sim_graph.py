@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 # cupy.cuda.set_pinned_memory_allocator(pinned_memory_pool.malloc)
 
 # Local imports
-from rdigraphs.sim_graph.th_ops import ThOps  # base_ThOps as ThOps
+from th_ops import ThOps  # base_ThOps as ThOps
 
 EPS = np.finfo(float).tiny
 
