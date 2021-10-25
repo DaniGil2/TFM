@@ -227,8 +227,8 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     train_data_clean = cleanText(train_data,preprocess = preprocess,topic_defs=True,full_page=True)
 
     foo = train_data_clean.copy()  # placeholder memory allocation
-    for page in test_data_clean:  # appending test data for dictionary creation
-        foo.append(page)
+    #for page in test_data_clean:  # appending test data for dictionary creation
+    #   foo.append(page)
 
     # Doc2Bow dictionary of full corpus
     dictionary = gensim.corpora.Dictionary(foo)
