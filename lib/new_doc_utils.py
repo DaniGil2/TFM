@@ -249,7 +249,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
             vocab = dictionary.values()
 
             vectorizer = CountVectorizer(vocabulary=vocab)
-            Bow_matrix = vectorizer.fit_transform([' '.join(doc) for doc in corpus_FFNN_W_C])
+            Bow_matrix = vectorizer.fit_transform([' '.join(doc) for doc in foo])
             Tf_idf_matrix = TfidfTransformer().fit_transform(Bow_matrix)
 
             x_train = Tf_idf_matrix.toarray()
