@@ -241,7 +241,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
     
-    if NN:
+    if clasif=='NN':
         # Tf-idf representation of training data
         # Test data as BoW
 
