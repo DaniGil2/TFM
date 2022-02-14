@@ -175,7 +175,7 @@ def cleanText(text,preprocess = 'simple',full_page=False, topic_defs=True):
     return cleaned_corpus
 
 
-def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, represent=False, clasif='NN', tf_idf=False, subcat_labels=None):
+def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple',full_page=False, debug=False, clasif='NN', subcat_labels=None):
     '''
     Given a dataset (wikipedia or arxiv) cleans training and testing sets.
     Creates doc2bow dictionary of full corpus, and sequences input data into suitable form for NeuralNet Classifier.
@@ -241,28 +241,25 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
         print(dictionary.token2id)
         print("Total number of unique words in corpus:", len(dictionary))
     
-    if represent:
-        if tf_idf:
-            # Tf-idf representation of training data
-            # Test data as BoW
+    if NN:
+        # Tf-idf representation of training data
+        # Test data as BoW
 
-            vocab = dictionary.values()
+        vocab = dictionary.values()
 
-            vectorizer = CountVectorizer(vocabulary=vocab)
-            Bow_matrix = vectorizer.fit_transform([' '.join(doc) for doc in foo])
-            Tf_idf_matrix = TfidfTransformer().fit_transform(Bow_matrix)
+        vectorizer = CountVectorizer(vocabulary=vocab)
+        Bow_matrix = vectorizer.fit_transform([' '.join(doc) for doc in train_data_clean])
+        Tf_idf_matrix = TfidfTransformer().fit_transform(Bow_matrix)
 
-            x_train = Tf_idf_matrix.toarray()
+        x_train = Tf_idf_matrix.toarray()
             
-        else:
-            # Data sequencing/encoding
-            train_model_input = list()
-            for topic in train_data_clean:
-                train_model_input.append(dictionary.doc2idx(topic))
-            train_model_input = np.array(train_model_input)
-
-            x_train = vectSeq(train_model_input, max_dims=len(dictionary))
-        
+        #else:
+        #    # Data sequencing/encoding NO TF-IDF
+        #    train_model_input = list()
+        #    for topic in train_data_clean:
+        #        train_model_input.append(dictionary.doc2idx(topic))
+        #    train_model_input = np.array(train_model_input)
+        #    x_train = vectSeq(train_model_input, max_dims=len(dictionary))
         
         test_model_input = list()
         for test_page in test_data_clean:
