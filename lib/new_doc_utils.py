@@ -235,7 +235,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     # Doc2Bow dictionary of full corpus
     dictionary = gensim.corpora.Dictionary(foo)
     
-    #dictionary.filter_extremes(10, 0.7)
+    
     
     if debug:
         print(dictionary.token2id)
@@ -244,6 +244,8 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     if clasif=='NN':
         # Tf-idf representation of training data
         # Test data as BoW
+        
+        dictionary.filter_extremes(10, 0.7)
 
         vocab = dictionary.values()
 
