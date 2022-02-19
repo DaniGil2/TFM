@@ -13,7 +13,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 
-import doc_utils
+import new_doc_utils
 
 class MaxSimClassifier(ClassifierMixin, BaseEstimator):
     """ 
@@ -81,7 +81,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
             Returns self.
         """
         # Adequating corpus for inference later
-        X = list(doc_utils.prepare_corpus(X, train_data=True, preprocess = self.preprocess,dataset_type=self.dataset_type))
+        X = list(new_doc_utils.prepare_corpus(X, train_data=True, preprocess = self.preprocess,dataset_type=self.dataset_type))
 
         self.model.build_vocab(X)
         self.model.train(X, total_examples=self.model.corpus_count, epochs=self.model.epochs)
@@ -105,7 +105,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
             Returns self.
         """
         # Adequating corpus for inference later
-        X = list(doc_utils.prepare_train_articles(X, y,preprocess = self.preprocess))
+        X = list(new_doc_utils.prepare_train_articles(X, y,preprocess = self.preprocess))
 
         self.model.build_vocab(X)
         self.model.train(X, total_examples=self.model.corpus_count, epochs=self.model.epochs)
@@ -131,7 +131,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
         # Check is fit had been called
         check_is_fitted(self, ['X_', 'y_'])
         # Input validation 
-        input_articles = list(doc_utils.prepare_corpus(X, train_data=False,preprocess = self.preprocess,dataset_type=self.dataset_type))
+        input_articles = list(new_doc_utils.prepare_corpus(X, train_data=False,preprocess = self.preprocess,dataset_type=self.dataset_type))
 
         outputs = list()
         for doc in input_articles:
@@ -199,7 +199,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
                 print("ERROR: paperlist from Arxivparser needed")
                 return -1
 
-            input_articles = list(doc_utils.prepare_corpus(dataset, train_data=False, 
+            input_articles = list(new_doc_utils.prepare_corpus(dataset, train_data=False, 
                                                         preprocess=self.preprocess,dataset_type=self.dataset_type))
 
             doc_topics_sims = [ [],[],[],[],[],[],[],[]]
@@ -216,7 +216,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
 
             best_papers_per_topic = [-1,-1,-1,-1,-1,-1,-1,-1]
 
-            n_papers_per_topic = len(paperslist)//len(doc_utils.ARXIV_WIKI_TOPICS)
+            n_papers_per_topic = len(paperslist)//len(new_doc_utils.ARXIV_WIKI_TOPICS)
 
             for i,topic in enumerate(doc_topics_sims):
                 paper_id = (max(topic, key = lambda i : i[0])[1])
@@ -224,8 +224,8 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
 
                 if debug:
                     true_label = paper_id//n_papers_per_topic
-                    print("Topic {} ({}) best matching paper: id #{}".format(i,doc_utils.ARXIV_WIKI_TOPICS[i],paper_id))
-                    print("\t--->True label:[",str(true_label), "](",doc_utils.ARXIV_WIKI_TOPICS[true_label] ,
+                    print("Topic {} ({}) best matching paper: id #{}".format(i,new_doc_utils.ARXIV_WIKI_TOPICS[i],paper_id))
+                    print("\t--->True label:[",str(true_label), "](",new_doc_utils.ARXIV_WIKI_TOPICS[true_label] ,
                             ") \t\tPaper title:",paperslist[paper_id]['title'])
 
             x_train_ext = ["", "", "", "", "", "", "", ""]
@@ -251,7 +251,7 @@ class MaxSimClassifier(ClassifierMixin, BaseEstimator):
 
     def wiki_pseudo_label(self, x_train, dataset,result="extended" ,top_n=2, debug = False ):
 
-        input_articles = list(doc_utils.prepare_corpus(dataset, train_data=False,preprocess=self.preprocess,dataset_type=self.dataset_type))
+        input_articles = list(new_doc_utils.prepare_corpus(dataset, train_data=False,preprocess=self.preprocess,dataset_type=self.dataset_type))
 
         doc_topics_sims = [ [],[],[],[],[],[],[],[],[]]
         
