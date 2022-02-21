@@ -4,19 +4,10 @@ import wikipediaapi
 from wikipedia.exceptions import PageError
 from wikipedia.exceptions import DisambiguationError
 from new_doc_utils import ARXIV_WIKI_TOPICS
+from new_doc_utils import ALL_TOPICS
 
 # Multithreading
 import threading
-
-ALL_TOPICS = ["Chemical engineering",
-              "Biomedical engineering",
-              "Civil engineering",
-              "Electrical engineering",
-              "Mechanical engineering",
-              "Aerospace engineering",
-              "Software engineering",
-              "Industrial engineering",
-              "Computer engineering"]
 
 WIKI = wikipediaapi.Wikipedia(language='en', extract_format=wikipediaapi.ExtractFormat.WIKI)
 
