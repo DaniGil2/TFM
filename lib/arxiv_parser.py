@@ -34,9 +34,9 @@ def init_arxiv_parser(test_size = 50):
     Auxiliary function for initializing the arxiv parser.
     Returns the queries (urls) feeded later to the parser.
     '''
-    if test_size not in [25,50,100,200]:
-        #Arxiv url query only allows [25, 50, 100, 200]
-        print("[FAILED] Allowed test_sizes (arxiv requirement): 25, 500, 100 or 200.") 
+    if test_size not in [25,50,100,200,500]:
+        #Arxiv url query only allows [25, 50, 100, 200, 500]
+        print("[FAILED] Allowed test_sizes (arxiv requirement): 25, 50, 100, 200 or 500.") 
         return -1
 
     queries = list()
