@@ -57,7 +57,7 @@ def init_arxiv_parser(test_size = 50, fromdate = 2010, todate = 2018):
 
 
 
-def arxiv_parser(test_size, debug = False):
+def arxiv_parser(test_size = 50, fromdate = 2010, todate = 2018, debug = False):
     '''
     Test_size: number of articles per topic to obtain.
 
@@ -72,7 +72,7 @@ def arxiv_parser(test_size, debug = False):
                     "abstract": str
     - paperslist: [] a flattened list of the retrieved papers
     '''
-    queries = init_arxiv_parser(test_size)
+    queries = init_arxiv_parser(test_size, fromdate, todate)
     if queries == -1: #Query not accepted
         return None 
 
