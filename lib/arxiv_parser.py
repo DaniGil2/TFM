@@ -29,7 +29,7 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Quantitative finance",
                     "Statistics"]
 
-def init_arxiv_parser(test_size = 50):
+def init_arxiv_parser(test_size = 50, fromdate, todate):
     '''
     Auxiliary function for initializing the arxiv parser.
     Returns the queries (urls) feeded later to the parser.
@@ -45,7 +45,7 @@ def init_arxiv_parser(test_size = 50):
     base = "https://arxiv.org/search/advanced?advanced="
     q1 = "terms-0-operator=AND&terms-0-term=&terms-0-field=title"
     q2 = "classification-physics_archives=all&classification-include_cross_list=exclude"
-    q3 = "date-year=&date-filter_by=date_range&date-from_date=2010&date-to_date=2018&date-date_type=submitted_date"
+    q3 = "date-year=&date-filter_by=date_range&date-from_date="+str(fromdate)+"&date-to_date="+str(todate)+"&date-date_type=submitted_date"
     q4 = "abstracts=show&size="+str(test_size)+"&order=-announced_date_first"
     #TODO: Add more parameters to tweak (year range, crosslisted...)
 
