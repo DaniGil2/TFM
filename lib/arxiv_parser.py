@@ -18,7 +18,6 @@ ARXIV_SUBJECTS = ["computer_science",
                 "mathematics",
                 "physics",
                 "q_biology",
-                "q_finance",
                 "statistics"]
 ARXIV_WIKI_TOPICS = ["Computer science",
                     "Economics",
@@ -26,7 +25,6 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Mathematics",
                     "Astrophysics",
                     "Computational biology",
-                    "Quantitative finance",
                     "Statistics"]
 
 def init_arxiv_parser(test_size = 50, fromdate = 2010, todate = 2018):
