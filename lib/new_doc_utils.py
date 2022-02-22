@@ -68,7 +68,6 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Mathematics",
                     "Astrophysics",
                     "Computational biology",
-                    "Quantitative finance",
                     "Statistics"]
 
 
