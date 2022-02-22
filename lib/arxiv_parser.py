@@ -29,7 +29,7 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Quantitative finance",
                     "Statistics"]
 
-def init_arxiv_parser(test_size = 50, fromdate, todate):
+def init_arxiv_parser(test_size = 50, fromdate = 2010, todate = 2018):
     '''
     Auxiliary function for initializing the arxiv parser.
     Returns the queries (urls) feeded later to the parser.
