@@ -350,12 +350,20 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
 #    return x_train, y_train, x_test, y_test
 
 
-def plotConfMatrix(y_test, predictions, model, dataset_type="wiki"):
+def plotConfMatrix(y_test, predictions, model, dataset_type="wiki", conversion=None):
     '''
     Given a one-hot encoded test labels and predictions [class labels]
     computes and plots confusion matrix of model classification result.
     '''
-
+    
+    if conversion:
+      corrected_predictions = np.copy(predictions)
+      for i in range(len(predictions)):
+        corrected_predictions[i]=conversion[predictions[i]]
+      
+      predictions = corrected_predictions
+    
+    
     if model in "NN":  # onehot encoded output of NN
         conf_matrix = confusion_matrix(y_test.argmax(axis=1), predictions)
     else:
