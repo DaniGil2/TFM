@@ -358,13 +358,14 @@ def plotConfMatrix(y_test, predictions, model, dataset_type="wiki", conversion=N
     '''
     
     if conversion:
-      corrected_predictions = np.copy(predictions)
-      for i in range(len(predictions)):
-        corrected_predictions[i]=conversion[predictions[i]]
+        corrected_predictions = np.copy(predictions)
+        for i in range(len(predictions)):
+            corrected_predictions[i]=conversion[predictions[i]]
       
-      predictions = corrected_predictions
+        predictions = corrected_predictions
     
-    print(accuracy_score(y_test, predictions))
+    if model in "MSC":
+        print(accuracy_score(y_test, predictions))
     
     if model in "NN":  # onehot encoded output of NN
         conf_matrix = confusion_matrix(y_test.argmax(axis=1), predictions)
