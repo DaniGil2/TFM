@@ -17,6 +17,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk import download
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.metrics import accuracy_score
 
 download('punkt')
 download('wordnet')
@@ -363,6 +364,7 @@ def plotConfMatrix(y_test, predictions, model, dataset_type="wiki", conversion=N
       
       predictions = corrected_predictions
     
+    print(accuracy_score(y_test, predictions))
     
     if model in "NN":  # onehot encoded output of NN
         conf_matrix = confusion_matrix(y_test.argmax(axis=1), predictions)
