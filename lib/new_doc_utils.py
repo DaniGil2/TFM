@@ -229,6 +229,10 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
     train_data_clean = cleanText(train_data,preprocess = preprocess,topic_defs=True,full_page=True)
 
     foo = train_data_clean.copy()  # placeholder memory allocation
+    
+    dict_only_train = gensim.corpora.Dictionary(foo)
+    foo_only_train = foo.copy()
+    
     for page in test_data_clean:  # appending test data for dictionary creation
        foo.append(page)
 
@@ -315,7 +319,7 @@ def processClassifData(train_data, test_data, dataset_type ,preprocess = 'simple
         y_train = train_labels
         y_test = test_labels
         
-    return x_train, y_train, x_test, y_test, dictionary, foo
+    return x_train, y_train, x_test, y_test, dictionary, foo, dict_only_train, foo_only_train
 
 
 #def processClassifierData(train_raw_data, test_raw_data, topics, dataset_type="wiki"):
