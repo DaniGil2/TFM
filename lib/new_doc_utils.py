@@ -76,6 +76,82 @@ import nltk
 from nltk import pos_tag
 from nltk.corpus import wordnet
 
+from simpletransformers.language_representation import RepresentationModel
+from simpletransformers.config.model_args import ModelArgs
+
+
+def processEmbedding(texts, model, topic_defs=False, full_page=False):
+    embeds = list()
+    if topic_defs:  # processing topic definitions
+        if full_page:
+            for text in texts:
+                embeds.append((model.encode_sentences([text.content], combine_strategy="mean")))
+        else:
+            for text in texts:
+                embeds.append((model.encode_sentences([text], combine_strategy="mean")))
+
+    else:  # processing test data
+        for text in texts:
+            embeds.append((model.encode_sentences([text], combine_strategy="mean")))
+
+    return embeds
+
+def processClassifDataEmbedding(train_data, test_data, dataset_type, model_type="bert", model_name="bert-base-uncased", subcat_labels=None):
+    test_data_c_pairs = list()  # has labels too
+    test_data_c = list()
+
+    model_args = ModelArgs(max_seq_length=156)
+    model = RepresentationModel(
+        model_type,
+        model_name,
+        #args=model_args,
+        use_cuda=False
+    )
+    
+    if dataset_type in "wiki":
+        for topic_cat in test_data:
+            if not topic_cat:
+                continue
+            topic_id = topic_cat[1]
+
+            embed_test_data = processEmbedding(topic_cat[0], model, False, False)
+
+            for article in embed_test_data:
+                test_data_c_pairs.append((article,topic_id))
+                test_data_c.append(article)
+
+    else:
+        print("ERROR: A dataset type must be specified: either 'wiki' or 'arxiv' datasets.")
+        return -1
+    
+    train_data_emb = processEmbedding(train_data, model, True, True)
+    x_train = np.concatenate(train_data_emb, axis=0)
+    x_test = np.concatenate(test_data_c, axis=0)
+    
+    train_labels = list()
+    test_labels = list()
+
+    if dataset_type in "wiki":
+        topics = ALL_TOPICS
+    elif dataset_type in "arxiv":
+        topics = ARXIV_WIKI_TOPICS
+
+    for i, topic in enumerate(topics):
+        train_labels.append(i)
+    
+    if subcat_labels:
+        train_labels = train_labels + subcat_labels
+    
+    for test_page in test_data_c_pairs:
+        test_labels.append(test_page[1])
+
+    # Generating labels (numerical)
+    y_train = train_labels
+    y_test = test_labels
+        
+    return x_train, y_train, x_test, y_test
+  
+  
 def vectSeq(sequences, max_dims=10000):
     '''
     Source: "Deep Learning with Python - François Cholet"
