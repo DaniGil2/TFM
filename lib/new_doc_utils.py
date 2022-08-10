@@ -72,15 +72,15 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Statistics"]
 
 def normalize(data1, data2):
-    if np.min(x_train_CLF_W)<np.min(x_test_CLF_W):
-        min=np.min(x_train_CLF_W)
+    if np.min(data1)<np.min(data2):
+        min=np.min(data1)
     else:
-        min=np.min(x_test_CLF_W)
+        min=np.min(data2)
 
-    if np.max(x_train_CLF_W)>np.max(x_test_CLF_W):
-        max=np.max(x_train_CLF_W)
+    if np.max(data1)>np.max(data2):
+        max=np.max(data1)
     else:
-        max=np.max(x_test_CLF_W)
+        max=np.max(data2)
 
     data1_norm = (data1 - min) / (max - min)
     data2_norm = (data2 - min) / (max - min)
