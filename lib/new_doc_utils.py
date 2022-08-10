@@ -71,6 +71,22 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Computational biology",
                     "Statistics"]
 
+def normalize(data1, data2)
+    if np.min(x_train_CLF_W)<np.min(x_test_CLF_W):
+        min=np.min(x_train_CLF_W)
+    else:
+        min=np.min(x_test_CLF_W)
+
+    if np.max(x_train_CLF_W)>np.max(x_test_CLF_W):
+        max=np.max(x_train_CLF_W)
+    else:
+        max=np.max(x_test_CLF_W)
+
+    data1_norm = (data1 - min) / (max - min)
+    data2_norm = (data2 - min) / (max - min)
+
+    return data1_norm, data2_norm
+  
 
 import nltk
 from nltk import pos_tag
