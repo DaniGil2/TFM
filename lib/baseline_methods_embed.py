@@ -19,7 +19,7 @@ from google.colab.data_table import DataTable
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer
 import pickle
 
 import new_doc_utils
@@ -36,7 +36,7 @@ def SVM(x_train,y_train,x_test,y_test,dataset):
             score = svm.score(x_test, y_test)
 
             #keeping track of the combinations
-            params = {'C': C, 'gamma': gamma, 'idf': idf}
+            params = {'C': C, 'gamma': gamma}
             svm_models_params.append((score, params))
 
             # if we got a better score, store the score and parameters
