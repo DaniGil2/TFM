@@ -71,7 +71,7 @@ ARXIV_WIKI_TOPICS = ["Computer science",
                     "Computational biology",
                     "Statistics"]
 
-def normalize(data1, data2)
+def normalize(data1, data2):
     if np.min(x_train_CLF_W)<np.min(x_test_CLF_W):
         min=np.min(x_train_CLF_W)
     else:
