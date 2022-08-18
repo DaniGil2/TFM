@@ -116,11 +116,11 @@ def processClassifDataEmbedding(train_data, test_data, dataset_type, model_type=
     test_data_c_pairs = list()  # has labels too
     test_data_c = list()
 
-    model_args = ModelArgs(max_seq_length=156)
+    model_args = ModelArgs(max_seq_length=512)
     model = RepresentationModel(
         model_type,
         model_name,
-        #args=model_args,
+        args=model_args,
         use_cuda=False
     )
     
